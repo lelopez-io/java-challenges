@@ -1,10 +1,16 @@
+import java.io.PrintWriter;
+import java.io.FileOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
+
+import java.io.UnsupportedEncodingException;
+import java.io.FileNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+
 
 public class CombineFiles {
   public static void main(String[] args) throws FileNotFoundException {
@@ -22,6 +28,13 @@ public class CombineFiles {
       ArrayList<Integer> intList = new ArrayList<Integer>();
 
       // should check if output file already exist, ask if you wanna overwrite
+      File fileOut = new File(args[fileAmnt]);
+      if (fileOut.exists()){
+        System.out.printf("File exists, will replace: %s\n", args[fileAmnt]);
+      } else {
+        System.out.printf("New file wil be made: %s\n", args[fileAmnt]);
+      }
+
       
       // iterate through files and find their sums
       for (int i = 0; i < fileAmnt; i++) {
@@ -74,15 +87,22 @@ public class CombineFiles {
       for (int i = 0; i < fileAmnt; i++) {
         System.out.printf("Order: %d\n", fileIndex[i]);
       }
-
+     
+      PrintWriter outputStream = null;
+      try {
+        outputStream = new PrintWriter(new FileOutputStream(args[fileAmnt]));
+      } catch (FileNotFoundException e) {
+        System.out.println("File Creation Failed");
+        System.exit(0);
+      } 
       for (int i = 0; i < fileList.size(); i++) {
-        System.out.printf("From index %d: \n", fileIndex[i]);
         Iterator<Integer> integerIterator = fileList.get(fileIndex[i]).iterator();
         while(integerIterator.hasNext()) {
-          System.out.printf(": %d\n", integerIterator.next());
+          // System.out.printf(": %d\n", integerIterator.next());
+          outputStream.println(integerIterator.next());
         }
-        System.out.printf("\n\n");
       }
+      outputStream.close();
     }
   }
 }
