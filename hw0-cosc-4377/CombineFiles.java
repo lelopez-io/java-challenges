@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
+/* CombineFiles - this program takes files that contains integers.
+ *  Files must be passed as arguments. The last argument will be used as the
+ *  ouput file name. If the outputfile already exist it will be overwritten.
+ * */
 
 public class CombineFiles {
   public static void main(String[] args) throws FileNotFoundException {
