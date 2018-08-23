@@ -51,6 +51,12 @@ public class HW1 {
     String tempWord;
 
     if (args.length > 1) {
+        try {
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("File does not exist in given directory");
+            System.exit(0); 
+        }
 
 
     } else {
