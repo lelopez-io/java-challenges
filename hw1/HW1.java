@@ -50,5 +50,17 @@ public class HW1 {
     // Temporarly holds word being read.
     String tempWord;
 
+    if (args.length > 1) {
+
+
+    } else {
+        System.out.println("program requires two inputs:");
+        System.out.println("\t1. Path to input .txt file");
+        System.out.println("\t2. prefix to output files");
+        System.exit(0);
+    }
+
+
+
     }
 }
