@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.PrintWriter;
 
 import java.io.IOException;
 
@@ -64,9 +65,36 @@ public class HW1 {
 
             fileText = fileText.toLowerCase();
 
-            // Get top word.
-            String topWord = getTopWord(1, fileText);
-            System.out.println(topWord);
+            // 1. Get top word.
+            try ( PrintWriter out = new PrintWriter(args[1] + "_1.txt") ) {
+                String topWord = getTopWord(1, fileText);
+                out.println(topWord);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 1");
+                System.exit(0);
+            }
+
+            // 2. Get 3rd most frequent word.
+            try ( PrintWriter out = new PrintWriter(args[1] + "_2.txt") ) {
+                String topWord = getTopWord(3, fileText);
+                out.println(topWord);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 2");
+                System.exit(0);
+            }
+            
+            
+            
+
+            
+
+
+
+
+
+
+
+
             
             // Split file into Sentences
             String[] sentences = fileText.split("\\. ");
