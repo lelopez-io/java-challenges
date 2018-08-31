@@ -66,7 +66,7 @@ public class HW1 {
             fileText = fileText.toLowerCase();
 
             // 1. Get top word.
-            try ( PrintWriter out = new PrintWriter(args[1] + "_1.txt") ) {
+            try ( PrintWriter out = new PrintWriter(args[1] + "1.txt") ) {
                 String topWord = getTopWord(1, fileText);
                 out.println(topWord);
             } catch (IOException e) {
