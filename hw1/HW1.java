@@ -3,8 +3,8 @@ import java.io.FileReader;
 
 import java.io.IOException;
 
-import java.util.List;
-import java.util.ArrayList;
+// import java.util.List;
+// import java.util.ArrayList;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -48,17 +48,32 @@ public class HW1 {
     // Program has two arguments: path to input file & prefix of outputfiles
     public static void main(String[] args) throws IOException {
 
-        // sentenceList: ArrayList of sentences, containing ArrayList of words.
-        // newline defines a paragraph so '\n' and '.' will be sentence delimiters.
-        // spaces char '32' will be the word delimiter within sentences
 
         if (args.length > 1) {
+            String fileText = "";
+
             try {
-                List<String> paragraphList = readFile("./tiny1.txt");
+                // Read entire file to a string
+                fileText = readFile(args[0]);
+                
+                
             } catch (IOException e) {
                 System.out.println("Failed to read file in given path");
                 System.exit(0);
             }
+
+            fileText = fileText.toLowerCase();
+
+            // Get top word.
+            String topWord = getTopWord(1, fileText);
+            System.out.println(topWord);
+            
+            // Split file into Sentences
+            String[] sentences = fileText.split("\\. ");
+            // for (int i = 0; i < sentences.length; i++) {
+            //     System.out.println(sentences[i]);
+            //     System.out.printf("\n");
+            // }
             
 
         } else {
@@ -71,32 +86,106 @@ public class HW1 {
 
     } // END main
 
-    private static List<String> readFile(String filename) throws IOException {
+    // This will sanitize the input making '. ' the only delimeter
+    private static String readFile(String filename) throws IOException {
         try {
-            String paragraph = null;
-            List<String> paragraphList = new ArrayList<String>();
-
             // "It is advisable to wrap a BufferedReader around any Reader whose
             // read() operations may be costly"
             BufferedReader in = new BufferedReader(new FileReader(filename));
 
-            // Read one line at a time and add to sentenceList
+            String fileText = "";
+            String lineText = null;
 
-            while ((paragraph = in.readLine()) != null) {
-                System.out.println(paragraph);
-                System.out.println("");
-                paragraphList.add(paragraph);
+            // Read one line at a time and add to fileText
+            while (( lineText = in.readLine()) != null) {
+
+                if (lineText.charAt(lineText.length() - 1) != '.') {
+                    fileText = fileText + lineText + ". ";
+                } else {
+                    fileText = fileText + lineText + " ";
+                }
+                
             }
 
             // Finish by closing BufferedReader and return results
-
             in.close();
 
-            return paragraphList;
+            return fileText;
 
         } catch (IOException ex) {
             System.out.println("File does not exist within given directory");
             return null;
         }
+    }
+
+    // Gets top word in position 1 through 3
+    private static String getTopWord(int pos, String in) {
+        // We'll find the top 3 
+        int n = 3;
+        String[] word = new String[n];
+        int[] frequency = new int[n];
+
+        in = in.replaceAll("\\.", "");
+
+        String[] allWords = in.split(" ");
+        String[] uniqueWords;
+        int count = 0;
+
+        uniqueWords = getUniqueWords(allWords);
+        
+        for (int j = 0; j < n; j++) {
+            frequency[j] = 0;
+        }
+
+        for (String l: uniqueWords) {
+            if ("".equals(l) || null == l) {
+                break;
+            }
+
+            for (String s: allWords) {
+                if (l.equals(s)) {
+                    count++;
+                }
+            }
+
+            // sub if the unique word 'l' has a higher 'count'
+            for(int i=0; i<n; i++){
+                if(count > frequency[i]){
+                    frequency[i] = count;
+                    word[i] = l;
+                    break;
+                }
+            }
+            count = 0;
+        }
+
+
+        return word[pos - 1] + ":" + frequency[pos -1];
+
+    } 
+
+   
+
+    private static String[] getUniqueWords(String[] keys) {
+        String[] uniqueKeys = new String[keys.length];
+        
+        uniqueKeys[0] = keys[0];
+        int uniqueKeyIndex = 1;
+        boolean keyAlreadyExists = false;
+
+        for (int i = 1; i < keys.length; i++) {
+            for (int j = 0; j <= uniqueKeyIndex; j++) {
+                if(keys[i].equals(uniqueKeys[j])) {
+                    keyAlreadyExists = true;
+                }
+            }
+
+            if(!keyAlreadyExists) {
+                uniqueKeys[uniqueKeyIndex] = keys[i];
+                uniqueKeyIndex++;  
+            }
+            keyAlreadyExists = false;
+        }
+        return uniqueKeys;
     }
 }
