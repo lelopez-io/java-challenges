@@ -38,4 +38,7 @@ hs_err_pid*
 /hw0-cosc-4377/*.txt
 
 # hw1
-/hw1/data/*.txt
+/hw1/*.txt
+/hw1/*.stdcout
+/hw1/*.stderr
+/hw1/*.diff
