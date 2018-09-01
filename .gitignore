@@ -1,6 +1,7 @@
 .bash_history
 .bash_logout
 .bash_profile
+.bash_git
 .bashrc
 .cache/
 .emacs
@@ -9,6 +10,7 @@
 .viminfo
 .vimrc
 .DS_store
+.local
 
 Compiled class file
 *.class
