@@ -27,6 +27,8 @@ import java.io.IOException;
  *      sentences in the whole file, also print its frequency and the 
  *      corresponding sentence.
  * 
+ *  DEBUG: why ending of file 'EOF' is different.
+ * 
  * * *
  * 
  *  4. List sentence(s) with the maximum no. of occurrences of the word "the" 
@@ -37,6 +39,8 @@ import java.io.IOException;
  * 
  *  6. List sentence(s) with the maximum no. of occurrences of the word "was" 
  *      in the entire file and also list the corresponding frequency.
+ * 
+ * * *
  * 
  *  7. List sentence(s) with the maximum no. of occurrences of the phrase 
  *      "but the" in the entire file and also list the corresponding frequency.
@@ -84,7 +88,7 @@ public class HW1 {
                 System.exit(0);
             }
 
-             // 2. Get most frequent word in all sentences.
+             // 3. Get most frequent word in all sentences.
              try (PrintWriter out = new PrintWriter(args[1] + "3.txt")) {
                 String topSentence = getTopSentence(fileText);
                 out.println(topSentence);
@@ -92,6 +96,18 @@ public class HW1 {
                 System.out.println("Failed to output Solution 3 ");
                 System.exit(0);
             }
+
+            // 4. Get most frequent word in all sentences.
+            try (PrintWriter out = new PrintWriter(args[1] + "4.txt")) {
+                String topSentenceWord = getSentenceWord("the", fileText);
+                out.println(topSentenceWord);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 4 ");
+                System.exit(0);
+            }
+
+
+            
 
 
         } else {
@@ -258,7 +274,57 @@ public class HW1 {
             }
         }
 
-        // Only going to return the most frequent one.
+        // Only going to return the most frequent one. 
+        // DEBUG: this might be the cuase of diff
         return wordFreq[0] + ":" + sentence[0];
+    }
+
+    private static String getSentenceWord(String word, String in) {
+        // I'll iterate through all sentences
+        String[] allSentences = in.split("\\. ");
+
+        int total = allSentences.length;
+        int[] frequency = new int[total];
+        String[] sentences = new String[total];
+
+        for (int j = 0; j < total; j++) {
+            frequency[j] = 0;
+        }
+
+        for (String s : allSentences) {
+            String[] sWords = s.split(" ");
+            int count = 0;
+
+            for (String w : sWords) {
+                if ("".equals(w) || null == w) {
+                    break;
+                }
+
+                if (w.equals(word)) {
+                    count++;
+                }
+            }
+
+            // Sub current sentence if it has a greater count
+            for (int i = 0; i < total; i++) {
+                if (count > frequency[i]) {
+
+                    for (int j = total - 1; j > i; j--) {
+                        frequency[j] = frequency[j -1];
+                        sentences[j] = sentences[j -1];
+                    }
+
+                    frequency[i] = count;
+                    sentences[i] = s;
+                    break;
+                }
+            }
+        }
+
+
+
+
+        // TODO: return a list of sentences with same freq as top
+        return word + ":" + frequency[0] + ":" + sentences[0];
     }
 }
