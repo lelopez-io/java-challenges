@@ -18,13 +18,16 @@ import java.io.IOException;
  * 
  *  Requirements:
  *  1. List the most frequent word(s) in the whole file and its frequency.
- *      Δ 
  * 
  *  2. List the 3rd most frequent word(s) in the whole file and its frequency.
+ * 
+ * * *
  * 
  *  3. List the word(s) with the highest frequency in a sentence across all 
  *      sentences in the whole file, also print its frequency and the 
  *      corresponding sentence.
+ * 
+ * * *
  * 
  *  4. List sentence(s) with the maximum no. of occurrences of the word "the" 
  *      in the entire file and also list the corresponding frequency.
@@ -81,12 +84,15 @@ public class HW1 {
                 System.exit(0);
             }
 
-            // Split file into Sentences
-            String[] sentences = fileText.split("\\. ");
-            // for (int i = 0; i < sentences.length; i++) {
-            // System.out.println(sentences[i]);
-            // System.out.printf("\n");
-            // }
+             // 2. Get most frequent word in all sentences.
+             try (PrintWriter out = new PrintWriter(args[1] + "3.txt")) {
+                String topSentence = getTopSentence(fileText);
+                out.println(topSentence);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 2");
+                System.exit(0);
+            }
+
 
         } else {
             // Exit Program if minimum requirments are not met
@@ -132,10 +138,11 @@ public class HW1 {
 
     // Gets top word in position 1 through 3
     private static String getTopWord(int pos, String in) {
-        // We'll find the top 5
+        // I'll find the top 5
         int top = 5;
-        String[] word = new String[top];
         int[] frequency = new int[top];
+        String[] word = new String[top];
+        
 
         in = in.replaceAll("\\.", "");
 
@@ -165,11 +172,13 @@ public class HW1 {
 
                 if (count > frequency[i]) {
 
-                    // Shift over current values so that we don't lose any.
+                    // Shift over array values so that we don't lose any.
                     for (int j = top - 1; j > i; j--) {
                         frequency[j] = frequency[j-1];
                         word[j] = word[j-1];
                     }
+
+                    // Insert the current value where room was made
                     frequency[i] = count;
                     word[i] = l;
                     break;
@@ -177,11 +186,6 @@ public class HW1 {
             }
 
             count = 0;
-        }
-
-        System.out.println("\nFinal:");
-        for (int x = 0; x < 5; x++) {
-            System.out.println(word[x] + ":" + frequency[x]);
         }
 
         return word[pos - 1] + ":" + frequency[pos - 1];
@@ -209,5 +213,52 @@ public class HW1 {
             keyAlreadyExists = false;
         }
         return uniqueKeys;
+    }
+
+    private static String getTopSentence(String in) {
+        // I'll find the top 5
+        int top = 5;
+        int[] frequency = new int[top];
+        String[] wordFreq = new String[top];
+        String[] sentence = new String[top];
+
+        String[] allSentences = in.split("\\. ");
+
+        for (int j = 0; j < top; j++) {
+            frequency[j] = 0;
+        }
+
+        for (String s : allSentences) {
+            if ("".equals(s) || null == s) {
+                break;
+            }
+
+            System.out.println(s);
+            // get the top word and frequency for each one
+            String wf = getTopWord(1, s);
+            // Grab int value
+            int f = wf.charAt(wf.length() - 1) - '0';
+
+            // Do the comparison for top selection array
+            for (int i = 0; i < top; i++) {
+                if (f  > frequency[i]) {
+                    // Shift over array values so that we don't lose any.
+                    for (int j = top - 1; j > i; j--) {
+                        frequency[j] = frequency[j -1];
+                        wordFreq[j] = wordFreq[j-1];
+                        sentence[j] = sentence[j-1];
+                    }
+
+                    // Insert the current value where room was made
+                    frequency[i] = f;
+                    wordFreq[i] = wf;
+                    sentence[i] = s;
+                    break;
+                }
+            }
+        }
+
+        // Only going to return the most frequent one.
+        return wordFreq[0] + ":" + sentence[0];
     }
 }
