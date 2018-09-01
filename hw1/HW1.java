@@ -89,7 +89,7 @@ public class HW1 {
                 String topSentence = getTopSentence(fileText);
                 out.println(topSentence);
             } catch (IOException e) {
-                System.out.println("Failed to output Solution 2");
+                System.out.println("Failed to output Solution 3 ");
                 System.exit(0);
             }
 
