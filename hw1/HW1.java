@@ -88,9 +88,9 @@ public class HW1 {
                 System.exit(0);
             }
 
-             // 3. Get most frequent word in all sentences.
-             try (PrintWriter out = new PrintWriter(args[1] + "3.txt")) {
-                String topSentence = getTopSentence(fileText);
+            // 3. Get most frequent words in all sentences.
+            try (PrintWriter out = new PrintWriter(args[1] + "3.txt")) {
+                String topSentence = getTopSentences(fileText);
                 out.println(topSentence);
             } catch (IOException e) {
                 System.out.println("Failed to output Solution 3 ");
@@ -105,10 +105,6 @@ public class HW1 {
                 System.out.println("Failed to output Solution 4 ");
                 System.exit(0);
             }
-
-
-            
-
 
         } else {
             // Exit Program if minimum requirments are not met
@@ -154,21 +150,20 @@ public class HW1 {
 
     // Gets top word in position 1 through 3
     private static String getTopWord(int pos, String in) {
-        // I'll find the top 5
-        int top = 5;
-        int[] frequency = new int[top];
-        String[] word = new String[top];
-        
-
         in = in.replaceAll("\\.", "");
 
         String[] allWords = in.split(" ");
         String[] uniqueWords;
-        int count = 0;
 
         uniqueWords = getUniqueWords(allWords);
 
-        for (int j = 0; j < top; j++) {
+        // I'll find the top 5
+        int total = uniqueWords.length;
+        int[] frequency = new int[total];
+        String[] word = new String[total];
+        int count = 0;
+
+        for (int j = 0; j < total; j++) {
             frequency[j] = 0;
         }
 
@@ -184,14 +179,14 @@ public class HW1 {
             }
 
             // sub if the unique word 'l' has a higher 'count'
-            for (int i = 0; i < top; i++) {
+            for (int i = 0; i < total; i++) {
 
                 if (count > frequency[i]) {
 
                     // Shift over array values so that we don't lose any.
-                    for (int j = top - 1; j > i; j--) {
-                        frequency[j] = frequency[j-1];
-                        word[j] = word[j-1];
+                    for (int j = total - 1; j > i; j--) {
+                        frequency[j] = frequency[j - 1];
+                        word[j] = word[j - 1];
                     }
 
                     // Insert the current value where room was made
@@ -204,8 +199,25 @@ public class HW1 {
             count = 0;
         }
 
-        return word[pos - 1] + ":" + frequency[pos - 1];
+        // Only going to return the most frequent one.
+        String result = "";
+        int collect = pos;
 
+        for (int i = 0; i < total && collect != 0; i++) {
+
+            if (i > 0 && frequency[i] != frequency[i - 1]) {
+                collect--;
+
+                if (collect > 0) {
+                    result = "";
+                    result += word[i] + ":" + frequency[i] + "\n";
+                }
+            } else {
+                result += word[i] + ":" + frequency[i] + "\n";
+            }
+        }
+
+        return result.trim();
     }
 
     private static String[] getUniqueWords(String[] keys) {
@@ -231,16 +243,16 @@ public class HW1 {
         return uniqueKeys;
     }
 
-    private static String getTopSentence(String in) {
-        // I'll find the top 5
-        int top = 5;
-        int[] frequency = new int[top];
-        String[] wordFreq = new String[top];
-        String[] sentence = new String[top];
+    private static String getTopSentences(String in) {
 
         String[] allSentences = in.split("\\. ");
 
-        for (int j = 0; j < top; j++) {
+        int total = allSentences.length;
+        int[] frequency = new int[total];
+        String[] wordFreq = new String[total];
+        String[] sentence = new String[total];
+
+        for (int j = 0; j < total; j++) {
             frequency[j] = 0;
         }
 
@@ -249,34 +261,56 @@ public class HW1 {
                 break;
             }
 
-            System.out.println(s);
             // get the top word and frequency for each one
-            String wf = getTopWord(1, s);
-            // Grab int value
-            int f = wf.charAt(wf.length() - 1) - '0';
+            String words = getTopWord(1, s);
+            String line[] = words.split("\\r?\\n");
 
-            // Do the comparison for top selection array
-            for (int i = 0; i < top; i++) {
-                if (f  > frequency[i]) {
-                    // Shift over array values so that we don't lose any.
-                    for (int j = top - 1; j > i; j--) {
-                        frequency[j] = frequency[j -1];
-                        wordFreq[j] = wordFreq[j-1];
-                        sentence[j] = sentence[j-1];
+            for (String l : line) {
+
+                // Grab int value
+                int f = l.charAt(l.length() - 1) - '0';
+
+                // Do the comparison for top selection array
+                for (int i = 0; i < total; i++) {
+                    if (f > frequency[i]) {
+                        // Shift over array values so that we don't lose any.
+                        for (int j = total - 1; j > i; j--) {
+                            frequency[j] = frequency[j - 1];
+                            wordFreq[j] = wordFreq[j - 1];
+                            sentence[j] = sentence[j - 1];
+                        }
+
+                        // Insert the current value where room was made
+                        frequency[i] = f;
+                        wordFreq[i] = l;
+                        sentence[i] = s;
+                        break;
                     }
-
-                    // Insert the current value where room was made
-                    frequency[i] = f;
-                    wordFreq[i] = wf;
-                    sentence[i] = s;
-                    break;
                 }
+
+            }
+
+        }
+
+        // Only going to return the most frequent one.
+        String result = "";
+        int collect = 1;
+
+        for (int i = 0; i < total && collect != 0; i++) {
+
+            if (i > 0 && frequency[i] != frequency[i - 1]) {
+                collect--;
+
+                if (collect > 0) {
+                    result = "";
+                    result += wordFreq[i] + ":" + sentence[i]  + "\n";
+                }
+            } else {
+                result += wordFreq[i] + ":" + sentence[i]  + "\n";
             }
         }
 
-        // Only going to return the most frequent one. 
-        // DEBUG: this might be the cuase of diff
-        return wordFreq[0] + ":" + sentence[0];
+        return result.trim();
     }
 
     private static String getSentenceWord(String word, String in) {
@@ -310,8 +344,8 @@ public class HW1 {
                 if (count > frequency[i]) {
 
                     for (int j = total - 1; j > i; j--) {
-                        frequency[j] = frequency[j -1];
-                        sentences[j] = sentences[j -1];
+                        frequency[j] = frequency[j - 1];
+                        sentences[j] = sentences[j - 1];
                     }
 
                     frequency[i] = count;
@@ -322,9 +356,23 @@ public class HW1 {
         }
 
 
+        String result = "";
+        int collect = 1;
 
+        for (int i = 0; i < total && collect != 0; i++) {
 
-        // TODO: return a list of sentences with same freq as top
-        return word + ":" + frequency[0] + ":" + sentences[0];
+            if (i > 0 && frequency[i] != frequency[i - 1]) {
+                collect--;
+
+                if (collect > 0) {
+                    result = "";
+                    result += word + ":" + frequency[i] + ":" + sentences[i] + "\n";
+                }
+            } else {
+                result += word + ":" + frequency[i] + ":" + sentences[i] + "\n";
+            }
+        }
+
+        return result.trim();
     }
 }
