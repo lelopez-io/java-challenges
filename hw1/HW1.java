@@ -4,19 +4,15 @@ import java.io.PrintWriter;
 
 import java.io.IOException;
 
-// import java.util.List;
-// import java.util.ArrayList;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /* HW1 - completed ab inito, 
  *  using only the following librarys & structs:
  *  - String operations ex. split()
- *  - java.util.regex to match target words and phrases
- *  - ArrayList
  *  - Standard file IO facilites for reading/writing 
  * 
  *  Requirements:
+ * 
  *  1. List the most frequent word(s) in the whole file and its frequency.
  * 
  *  2. List the 3rd most frequent word(s) in the whole file and its frequency.
@@ -26,8 +22,6 @@ import java.io.IOException;
  *  3. List the word(s) with the highest frequency in a sentence across all 
  *      sentences in the whole file, also print its frequency and the 
  *      corresponding sentence.
- * 
- *  DEBUG: why ending of file 'EOF' is different.
  * 
  * * *
  * 
@@ -105,6 +99,52 @@ public class HW1 {
                 System.out.println("Failed to output Solution 4 ");
                 System.exit(0);
             }
+
+            // 5. Get most frequent word in all sentences.
+            try (PrintWriter out = new PrintWriter(args[1] + "5.txt")) {
+                String topSentenceWord = getSentenceWord("of", fileText);
+                out.println(topSentenceWord);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 5 ");
+                System.exit(0);
+            }
+
+            // 6. Get most frequent word in all sentences.
+            try (PrintWriter out = new PrintWriter(args[1] + "6.txt")) {
+                String topSentenceWord = getSentenceWord("was", fileText);
+                out.println(topSentenceWord);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 6 ");
+                System.exit(0);
+            }
+
+            // 7. Get most frequent word in all sentences.
+            try (PrintWriter out = new PrintWriter(args[1] + "7.txt")) {
+                String topSentencePhrase = getSentencePhrase("but the", fileText);
+                out.println(topSentencePhrase);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 7 ");
+                System.exit(0);
+            }
+
+            // 8. Get most frequent word in all sentences.
+            try (PrintWriter out = new PrintWriter(args[1] + "8.txt")) {
+                String topSentencePhrase = getSentencePhrase("it was", fileText);
+                out.println(topSentencePhrase);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 8 ");
+                System.exit(0);
+            }
+
+            // 9. Get most frequent word in all sentences.
+            try (PrintWriter out = new PrintWriter(args[1] + "9.txt")) {
+                String topSentencePhrase = getSentencePhrase("in my", fileText);
+                out.println(topSentencePhrase);
+            } catch (IOException e) {
+                System.out.println("Failed to output Solution 9 ");
+                System.exit(0);
+            }
+
 
         } else {
             // Exit Program if minimum requirments are not met
@@ -303,10 +343,10 @@ public class HW1 {
 
                 if (collect > 0) {
                     result = "";
-                    result += wordFreq[i] + ":" + sentence[i]  + "\n";
+                    result += wordFreq[i] + ":" + sentence[i] + "\n";
                 }
             } else {
-                result += wordFreq[i] + ":" + sentence[i]  + "\n";
+                result += wordFreq[i] + ":" + sentence[i] + "\n";
             }
         }
 
@@ -355,7 +395,6 @@ public class HW1 {
             }
         }
 
-
         String result = "";
         int collect = 1;
 
@@ -370,6 +409,62 @@ public class HW1 {
                 }
             } else {
                 result += word + ":" + frequency[i] + ":" + sentences[i] + "\n";
+            }
+        }
+
+        return result.trim();
+    }
+
+    private static String getSentencePhrase(String phrase, String in) {
+        // I'll iterate through all sentences
+        String[] allSentences = in.split("\\. ");
+
+        int total = allSentences.length;
+        int[] frequency = new int[total];
+        String[] sentences = new String[total];
+
+
+        for (int j = 0; j < total; j++) {
+            frequency[j] = 0;
+        }
+
+        for (String sentence : allSentences) {
+            String s = sentence;
+            String p = phrase;
+            int count = (s.length() - s.replace(p, "").length()) / p.length(); 
+            
+
+            // Sub current sentence if it has a greater count
+            for (int i = 0; i < total; i++) {
+                if (count >= frequency[i]) {
+
+                    // Make room for current selection
+                    for (int j = total - 1; j > i; j--) {
+                        frequency[j] = frequency[j - 1];
+                        sentences[j] = sentences[j - 1];
+                    }
+
+                    frequency[i] = count;
+                    sentences[i] = sentence;
+                    break;
+                }
+            }
+        }
+
+        String result = "";
+        int collect = 1;
+
+        for (int i = 0; i < total && collect != 0; i++) {
+
+            if (i > 0 && frequency[i] != frequency[i - 1]) {
+                collect--;
+
+                if (collect > 0) {
+                    result = "";
+                    result += phrase + ":" + frequency[i] + ":" + sentences[i] + "\n";
+                }
+            } else {
+                result += phrase + ":" + frequency[i] + ":" + sentences[i] + "\n";
             }
         }
 
