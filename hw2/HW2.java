@@ -28,6 +28,7 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Scanner;
 import java.io.PrintWriter;
 
 import java.io.IOException;
@@ -51,20 +52,20 @@ public class HW2 {
 
             // Process files with given operation
             switch (args[0]) {
-                case "add": 
-                    System.out.println("will add");
-                    break; 
-                case "sub": 
-                    System.out.println("will sub");
-                    break;
-                case "mul": 
-                    System.out.println("will mul");
-                    break; 
-                default: 
-                    opErr(args[0]);
-                    break;
+            case "add":
+                System.out.println("will add");
+                String out = make2DLL(fileOne);
+                break;
+            case "sub":
+                System.out.println("will sub");
+                break;
+            case "mul":
+                System.out.println("will mul");
+                break;
+            default:
+                opErr(args[0]);
+                break;
             }
-
 
         } else if (args.length == 3) {
             String fileOne = "";
@@ -80,15 +81,15 @@ public class HW2 {
 
             // Process file with given operation
             switch (args[0]) {
-                case "tra":
-                    System.out.println("will transpose");
-                    break;
-                case "det":
-                    System.out.println("will find determinant");
-                    break;
-                default: 
-                    opErr(args[0]);
-                    break;
+            case "tra":
+                System.out.println("will transpose");
+                break;
+            case "det":
+                System.out.println("will find determinant");
+                break;
+            default:
+                opErr(args[0]);
+                break;
             }
 
         } else {
@@ -116,13 +117,11 @@ public class HW2 {
             BufferedReader in = new BufferedReader(new FileReader(filename));
 
             String fileText = "";
-            String lineText = null;
+            String line = null;
 
             // Read one line at a time and add to fileText
-            while ((lineText = in.readLine()) != null) {
-
-                fileText = fileText + lineText + "\n";
-
+            while ((line = in.readLine()) != null) {
+                fileText = fileText + line + "\n";
             }
 
             // Finish by closing BufferedReader and return results
@@ -134,5 +133,29 @@ public class HW2 {
             System.out.println("File does not exist within given directory");
             return null;
         }
+    }
+
+    private static String make2DLL(String file) throws IOException {
+
+        Scanner in = new Scanner(file);
+        Scanner line = null;
+
+        int number = -999;
+
+        while (in.hasNext()) {
+   
+
+            line = new Scanner(in.nextLine());
+            while (line.hasNextInt()) {
+                number = line.nextInt();
+                System.out.printf("%d, ", number);
+            }
+
+            System.out.println("");
+        }
+
+        in.close();
+        line.close();
+        return null;
     }
 }
