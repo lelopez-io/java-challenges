@@ -54,7 +54,7 @@ public class HW2 {
             switch (args[0]) {
             case "add":
                 System.out.println("will add");
-                String out = make2DLL(fileOne);
+                Head matrixOne = makeLLMatrix(fileOne);
                 break;
             case "sub":
                 System.out.println("will sub");
@@ -135,7 +135,20 @@ public class HW2 {
         }
     }
 
-    private static String make2DLL(String file) throws IOException {
+    static class Node {
+        int data;
+        Node right = null;
+        Node down = null;
+    }
+
+    static class Head {
+        Node first = null;
+
+        int rows;
+        int cols;
+    }
+
+    private static Head makeLLMatrix(String file) throws IOException {
 
         Scanner in = new Scanner(file);
         Scanner line = null;
@@ -145,17 +158,44 @@ public class HW2 {
         int rowCount = 0; // use to count current row
         int colCount = 0; // use to count current column
         int number = -999;
-        
+
+        Head tmpHead = new Head();
+        Node tmpNode = new Node();
+        Node prevNode = new Node();
+        Node prevRow = new Node();
+        Node prevRowNode = new Node();
 
         // Row loop
         while (in.hasNext()) {
-   
+
             // Column loop
             line = new Scanner(in.nextLine());
             while (line.hasNextInt()) {
                 number = line.nextInt();
                 System.out.printf("%d, ", number);
+                tmpNode.data = number;
 
+                if (rowCount == 0 && colCount == 0) {
+                    tmpHead.first = tmpNode;
+                    prevRow = tmpNode;
+                } else if (rowCount > 0 && colCount == 0) {
+                    prevRowNode = prevRow;
+                    prevRow = tmpNode;
+                } 
+
+                
+                if (rowCount > 0) {
+                    prevRowNode.down = tmpNode;
+                    prevRowNode = prevRowNode.right;
+                }
+
+                if (colCount > 0) {
+                    prevNode.right = tmpNode;
+                }
+
+                
+                prevNode = tmpNode;
+                tmpNode = new Node();
                 colCount++;
             }
             // On exit check if column size is good
@@ -176,9 +216,12 @@ public class HW2 {
 
         rowsTotal = rowCount;
 
+        // will use these to confirm two matricies can be operated on
+        tmpHead.rows = rowsTotal;
+        tmpHead.cols = colsTotal;
 
         in.close();
         line.close();
-        return null;
+        return tmpHead;
     }
 }
