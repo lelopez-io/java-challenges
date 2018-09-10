@@ -40,16 +40,31 @@ public class HW2 {
             String fileOne = "";
             String fileTwo = "";
 
+            // Store file to varible
             try {
                 fileOne = readFile(args[1]);
                 fileTwo = readFile(args[2]);
-
-                System.out.println(fileOne);
-                System.out.println(fileTwo);
             } catch (IOException e) {
                 System.out.println("Failed to read files in given path");
                 System.exit(0);
             }
+
+            // Process files with given operation
+            switch (args[0]) {
+                case "add": 
+                    System.out.println("will add");
+                    break; 
+                case "sub": 
+                    System.out.println("will add");
+                    break;
+                case "mul": 
+                    System.out.println("will add");
+                    break; 
+                default: 
+                    opErr(args[0]);
+                    break;
+            }
+
 
         } else if (args.length == 3) {
             System.out.println("Will perform determinant on input");
@@ -65,13 +80,19 @@ public class HW2 {
 
         } else {
             // Exit Program if minimum requirments are not met
-            System.out.println("program requires three or more arguments:");
+            System.out.println("program requires three or four arguments:");
             System.out.println("\t1. Operation to perform");
             System.out.println("\t2. first input file");
-            System.out.println("\t3. second input file");
+            System.out.println("\t3. second input file (optional)");
             System.out.println("\t4. output file name");
             System.exit(0);
         }
+    }
+
+    private static void opErr(String operation) {
+        System.out.printf(operation, " is invalid.\n");
+        System.out.println("USE: 'add', 'sub', or 'mul' for two input files");
+        System.out.println("USE: 'tra' or 'det' for one input file");
     }
 
     private static String readFile(String filename) throws IOException {
