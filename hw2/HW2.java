@@ -140,19 +140,42 @@ public class HW2 {
         Scanner in = new Scanner(file);
         Scanner line = null;
 
+        int rowsTotal = 0;
+        int colsTotal = 0;
+        int rowCount = 0; // use to count current row
+        int colCount = 0; // use to count current column
         int number = -999;
+        
 
+        // Row loop
         while (in.hasNext()) {
    
-
+            // Column loop
             line = new Scanner(in.nextLine());
             while (line.hasNextInt()) {
                 number = line.nextInt();
                 System.out.printf("%d, ", number);
+
+                colCount++;
             }
+            // On exit check if column size is good
+            if (colsTotal == 0) {
+                colsTotal = colCount;
+            } else if (colCount > colsTotal) {
+                System.out.println("Column size error");
+                System.out.println("\tEnsure all columns are the same size.");
+                System.exit(0);
+            }
+
+            // Reset column count for next row
+            colCount = 0;
+            rowCount++;
 
             System.out.println("");
         }
+
+        rowsTotal = rowCount;
+
 
         in.close();
         line.close();
