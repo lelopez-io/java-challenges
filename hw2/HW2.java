@@ -40,7 +40,7 @@ public class HW2 {
             String fileOne = "";
             String fileTwo = "";
 
-            // Store file to varible
+            // Store files to varibles
             try {
                 fileOne = readFile(args[1]);
                 fileTwo = readFile(args[2]);
@@ -55,10 +55,10 @@ public class HW2 {
                     System.out.println("will add");
                     break; 
                 case "sub": 
-                    System.out.println("will add");
+                    System.out.println("will sub");
                     break;
                 case "mul": 
-                    System.out.println("will add");
+                    System.out.println("will mul");
                     break; 
                 default: 
                     opErr(args[0]);
@@ -67,9 +67,9 @@ public class HW2 {
 
 
         } else if (args.length == 3) {
-            System.out.println("Will perform determinant on input");
             String fileOne = "";
 
+            // Store file to variable
             try {
                 fileOne = readFile(args[1]);
                 System.out.println(fileOne);
@@ -78,21 +78,35 @@ public class HW2 {
                 System.exit(0);
             }
 
+            // Process file with given operation
+            switch (args[0]) {
+                case "tra":
+                    System.out.println("will transpose");
+                    break;
+                case "det":
+                    System.out.println("will find determinant");
+                    break;
+                default: 
+                    opErr(args[0]);
+                    break;
+            }
+
         } else {
-            // Exit Program if minimum requirments are not met
-            System.out.println("program requires three or four arguments:");
-            System.out.println("\t1. Operation to perform");
+            // Exit program if minimum requirments are not met
+            System.out.println("Program requires three or four arguments:");
+            System.out.println("\t1. Operation (tra, det) or [add, sub, mul]");
             System.out.println("\t2. first input file");
-            System.out.println("\t3. second input file (optional)");
+            System.out.println("\t3. second input file [optional]");
             System.out.println("\t4. output file name");
             System.exit(0);
         }
     }
 
     private static void opErr(String operation) {
-        System.out.printf(operation, " is invalid.\n");
+        System.out.printf("'%s' is invalid for given input.\n", operation);
         System.out.println("USE: 'add', 'sub', or 'mul' for two input files");
         System.out.println("USE: 'tra' or 'det' for one input file");
+        System.exit(0);
     }
 
     private static String readFile(String filename) throws IOException {
