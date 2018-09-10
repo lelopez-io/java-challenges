@@ -9,6 +9,7 @@
 .ssh/
 .viminfo
 .vimrc
+.vscode/
 .DS_store
 .local
 
