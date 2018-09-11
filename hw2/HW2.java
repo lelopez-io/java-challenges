@@ -50,18 +50,29 @@ public class HW2 {
                 System.exit(0);
             }
 
+            Head matrixOne = makeLLMatrix(fileOne);
+            Head matrixTwo = makeLLMatrix(fileTwo);
+            String result;
+
             // Process files with given operation
             switch (args[0]) {
             case "add":
-                System.out.println("will add");
-                Head matrixOne = makeLLMatrix(fileOne);
-                Head matrixTwo = makeLLMatrix(fileTwo);
-
-                String result = addLLMatrix(matrixOne, matrixTwo);
-                System.out.println(result);
+                try (PrintWriter out = new PrintWriter(args[3])) {
+                    result = addLLMatrix(matrixOne, matrixTwo);
+                    out.println(result);
+                } catch (IOException e) {
+                    System.out.println("Failed to output Solution 1");
+                    System.exit(0);
+                }
                 break;
             case "sub":
-                System.out.println("will sub");
+                try (PrintWriter out = new PrintWriter(args[3])) {
+                    result = subLLMatrix(matrixOne, matrixTwo);
+                    out.println(result);
+                } catch (IOException e) {
+                    System.out.println("Failed to output Solution 1");
+                    System.exit(0);
+                }
                 break;
             case "mul":
                 System.out.println("will mul");
@@ -261,4 +272,39 @@ public class HW2 {
 
         return result.substring(0, result.length() - 1);
     }
+
+    private static String subLLMatrix( Head matrixOne, Head matrixTwo) {
+        // fist check to see if matrices are
+        if ((matrixOne.cols != matrixTwo.cols) || (matrixOne.rows != matrixTwo.rows)) {
+            System.out.println("The given matricies are not the same size");
+            System.out.println("Program will now exit: FAILED TO ADD");
+            System.exit(0);
+        }
+
+        String result = "";
+        float tmpVal = 0.0f;
+        Node colA = matrixOne.first;
+        Node rowA = matrixOne.first;
+        Node colB = matrixTwo.first;
+        Node rowB = matrixTwo.first;
+        
+        for (int i = 0; i < matrixOne.rows; i++) {
+            for (int j = 0; j < matrixOne.cols; j++) {
+                tmpVal = (float) colA.data - colB.data;
+                result += String.format("%4.1f ", tmpVal);
+
+                colA = colA.right;
+                colB = colB.right;
+            }
+            result = result.substring(0, result.length() - 1) + "\n";
+            colA = rowA.down;
+            colB = rowB.down;
+            rowA = colA;
+            rowB = colB;
+        }
+
+        return result.substring(0, result.length() - 1);
+    }
+
+
 }
