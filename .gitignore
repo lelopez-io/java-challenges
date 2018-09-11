@@ -45,3 +45,10 @@ hs_err_pid*
 /hw1/*.stdcout
 /hw1/*.stderr
 /hw1/*.diff
+
+# hw2
+/hw2/*.txt
+/hw2/*.stdcout
+/hw2/*.stderr
+/hw2/*.diff
+/hw2/*.output
