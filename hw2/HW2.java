@@ -322,13 +322,26 @@ public class HW2 {
         Node colB = matrixB.first;
         Node rowB = matrixB.first;
 
-        for (int i = 0; i < matrixA.rows; i++) {
-            for (int j = 0; j < matrixB.cols; j++) {
-                tempValue
+        // for (int i = 0; i < matrixA.col; i++) {
+        //     for (int j = 0; j < matrixB.rows; j++) {
+        //         tempValue += colA.data * rowB.data;
 
-            }
-        }
+        //         colA = colA.right;
+        //         rowB = rowB.down;
+
+        //     }
+        // }
+        result += String.format("%4.1f ", recAB(rowA, colB));
+
         
-        return "will mul";
+        return result;
+    }
+
+    private static float recAB (Node rowA, Node colB) {
+        if (rowA == null || colB == null) {
+            return 0.0f;
+        } else {
+            return (float) rowA.data * colB.data + recAB(rowA.right, colB.down);
+        }
     }
 }
