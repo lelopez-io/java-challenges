@@ -55,6 +55,10 @@ public class HW2 {
             case "add":
                 System.out.println("will add");
                 Head matrixOne = makeLLMatrix(fileOne);
+                Head matrixTwo = makeLLMatrix(fileTwo);
+
+                String result = addLLMatrix(matrixOne, matrixTwo);
+                System.out.println(result);
                 break;
             case "sub":
                 System.out.println("will sub");
@@ -172,7 +176,7 @@ public class HW2 {
             line = new Scanner(in.nextLine());
             while (line.hasNextInt()) {
                 number = line.nextInt();
-                System.out.printf("%d, ", number);
+                // System.out.printf("%d, ", number);
                 tmpNode.data = number;
 
                 if (rowCount == 0 && colCount == 0) {
@@ -211,7 +215,7 @@ public class HW2 {
             colCount = 0;
             rowCount++;
 
-            System.out.println("");
+            // System.out.println("");
         }
 
         rowsTotal = rowCount;
@@ -223,5 +227,17 @@ public class HW2 {
         in.close();
         line.close();
         return tmpHead;
+    }
+
+    private static String addLLMatrix( Head matrixOne, Head matrixTwo) {
+
+        String result = "";
+
+
+        result += String.format("%4.1f", (float) matrixOne.first.data + matrixTwo.first.data);
+
+
+
+        return result;
     }
 }
