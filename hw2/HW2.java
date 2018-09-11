@@ -360,18 +360,23 @@ public class HW2 {
         }
     }
 
+    
+    // Starting at the first column I will turn all it's values into a row
     private static String traLLMatrix (Head matrixHead) {
         String result = "";
         Node colA = matrixHead.first;
         Node rowA = matrixHead.first;
 
+        // The values of each column will be used to generate rows
         for (int i = 0; i < matrixHead.cols; i++) {
             for (int j = 0; j < matrixHead.rows; j++) {
                 result += String.format("%4.1f ", (float) rowA.data);
                 rowA = rowA.down;
             }
             result = result.substring(0, result.length() - 1) + "\n";
-            colA = colA.right;
+            // Move over to the next column
+            colA = colA.right; 
+            // Start Row at top of new column
             rowA = colA;
         }
 
