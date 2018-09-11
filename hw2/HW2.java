@@ -94,16 +94,24 @@ public class HW2 {
             // Store file to variable
             try {
                 fileOne = readFile(args[1]);
-                System.out.println(fileOne);
             } catch (IOException e) {
                 System.out.println("Failed to read files in given path");
                 System.exit(0);
             }
 
+            Head matrixOne = makeLLMatrix(fileOne);
+            String result;
+
             // Process file with given operation
             switch (args[0]) {
             case "tra":
-                System.out.println("will transpose");
+                try (PrintWriter out = new PrintWriter(args[2])) {
+                    result = traLLMatrix(matrixOne);
+                    out.println(result);
+                } catch (IOException e) {
+                    System.out.println("Failed to output Solution for 'tra'");
+                    System.exit(0);
+                }
                 break;
             case "det":
                 System.out.println("will find determinant");
@@ -350,5 +358,23 @@ public class HW2 {
         } else {
             return (float) rowA.data * colB.data + recAB(rowA.right, colB.down);
         }
+    }
+
+    private static String traLLMatrix (Head matrixHead) {
+        String result = "";
+        Node colA = matrixHead.first;
+        Node rowA = matrixHead.first;
+
+        for (int i = 0; i < matrixHead.cols; i++) {
+            for (int j = 0; j < matrixHead.rows; j++) {
+                result += String.format("%4.1f ", (float) rowA.data);
+                rowA = rowA.down;
+            }
+            result = result.substring(0, result.length() - 1) + "\n";
+            colA = colA.right;
+            rowA = colA;
+        }
+
+        return result.substring(0, result.length() - 1);
     }
 }
