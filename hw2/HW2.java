@@ -26,9 +26,9 @@
  *      - Floating point format with 1 decimal place (e.g. -3.0)
  * */
 
+import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Scanner;
 import java.io.PrintWriter;
 
 import java.io.IOException;
@@ -230,14 +230,35 @@ public class HW2 {
     }
 
     private static String addLLMatrix( Head matrixOne, Head matrixTwo) {
+        // fist check to see if matrices are
+        if ((matrixOne.cols != matrixTwo.cols) || (matrixOne.rows != matrixTwo.rows)) {
+            System.out.println("The given matricies are not the same size");
+            System.out.println("Program will now exit: FAILED TO ADD");
+            System.exit(0);
+        }
 
         String result = "";
+        float tmpVal = 0.0f;
+        Node colA = matrixOne.first;
+        Node rowA = matrixOne.first;
+        Node colB = matrixTwo.first;
+        Node rowB = matrixTwo.first;
+        
+        for (int i = 0; i < matrixOne.rows; i++) {
+            for (int j = 0; j < matrixOne.cols; j++) {
+                tmpVal = (float) colA.data + colB.data;
+                result += String.format("%4.1f ", tmpVal);
 
+                colA = colA.right;
+                colB = colB.right;
+            }
+            result = result.substring(0, result.length() - 1) + "\n";
+            colA = rowA.down;
+            colB = rowB.down;
+            rowA = colA;
+            rowB = colB;
+        }
 
-        result += String.format("%4.1f", (float) matrixOne.first.data + matrixTwo.first.data);
-
-
-
-        return result;
+        return result.substring(0, result.length() - 1);
     }
 }
