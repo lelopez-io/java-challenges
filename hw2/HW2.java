@@ -61,7 +61,7 @@ public class HW2 {
                     result = addLLMatrix(matrixOne, matrixTwo);
                     out.println(result);
                 } catch (IOException e) {
-                    System.out.println("Failed to output Solution 1");
+                    System.out.println("Failed to output Solution for 'add'");
                     System.exit(0);
                 }
                 break;
@@ -70,13 +70,18 @@ public class HW2 {
                     result = subLLMatrix(matrixOne, matrixTwo);
                     out.println(result);
                 } catch (IOException e) {
-                    System.out.println("Failed to output Solution 1");
+                    System.out.println("Failed to output Solution for 'sub'");
                     System.exit(0);
                 }
                 break;
             case "mul":
-                result = mulLLMatrix(matrixOne, matrixTwo);
-                System.out.println(result);
+                try (PrintWriter out = new PrintWriter(args[3])) {
+                    result = mulLLMatrix(matrixOne, matrixTwo);
+                    out.println(result);
+                } catch (IOException e) {
+                    System.out.println("Failed to output Solution for 'mul'");
+                    System.exit(0);
+                }
                 break;
             default:
                 opErr(args[0]);
@@ -317,24 +322,26 @@ public class HW2 {
 
         String result = "";
         float tmpVal = 0.0f;
-        Node colA = matrixA.first;
         Node rowA = matrixA.first;
         Node colB = matrixB.first;
-        Node rowB = matrixB.first;
 
-        // for (int i = 0; i < matrixA.col; i++) {
-        //     for (int j = 0; j < matrixB.rows; j++) {
-        //         tempValue += colA.data * rowB.data;
 
-        //         colA = colA.right;
-        //         rowB = rowB.down;
+        for (int i = 0; i < matrixA.rows; i++) {
+            for (int j = 0; j < matrixB.cols; j++) {
 
-        //     }
-        // }
-        result += String.format("%4.1f ", recAB(rowA, colB));
+                tmpVal = recAB(rowA, colB);
+                result += String.format("%5.1f ", tmpVal);
 
-        
-        return result;
+                colB = colB.right;
+            }
+            result = result.substring(0, result.length() - 1) + "\n";
+
+            rowA = rowA.down;
+            colB = matrixB.first;
+        }
+
+
+        return result.substring(0, result.length() - 1);
     }
 
     private static float recAB (Node rowA, Node colB) {
