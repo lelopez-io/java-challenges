@@ -75,7 +75,8 @@ public class HW2 {
                 }
                 break;
             case "mul":
-                System.out.println("will mul");
+                result = mulLLMatrix(matrixOne, matrixTwo);
+                System.out.println(result);
                 break;
             default:
                 opErr(args[0]);
@@ -277,7 +278,7 @@ public class HW2 {
         // fist check to see if matrices are
         if ((matrixOne.cols != matrixTwo.cols) || (matrixOne.rows != matrixTwo.rows)) {
             System.out.println("The given matricies are not the same size");
-            System.out.println("Program will now exit: FAILED TO ADD");
+            System.out.println("Program will now exit: FAILED TO SUB");
             System.exit(0);
         }
 
@@ -306,5 +307,28 @@ public class HW2 {
         return result.substring(0, result.length() - 1);
     }
 
+    private static String mulLLMatrix (Head matrixA, Head matrixB) {
+        // fist check to see if matrices are
+        if ((matrixA.cols != matrixB.rows) || (matrixA.rows != matrixB.cols)) {
+            System.out.println("The given matricies are compatible");
+            System.out.println("Program will now exit: FAILED TO MULTIPLY");
+            System.exit(0);
+        }
 
+        String result = "";
+        float tmpVal = 0.0f;
+        Node colA = matrixA.first;
+        Node rowA = matrixA.first;
+        Node colB = matrixB.first;
+        Node rowB = matrixB.first;
+
+        for (int i = 0; i < matrixA.rows; i++) {
+            for (int j = 0; j < matrixB.cols; j++) {
+                tempValue
+
+            }
+        }
+        
+        return "will mul";
+    }
 }
