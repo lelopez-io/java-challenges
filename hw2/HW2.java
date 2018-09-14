@@ -114,7 +114,13 @@ public class HW2 {
                 }
                 break;
             case "det":
-                System.out.println("will find determinant");
+                try (PrintWriter out = new PrintWriter(args[2])) {
+                    result = detLLMatrix(matrixOne);
+                    out.println(result);
+                } catch (IOException e) {
+                    System.out.println("Failed to output Solution for 'det");
+                    System.exit(0);
+                }
                 break;
             default:
                 opErr(args[0]);
@@ -166,6 +172,7 @@ public class HW2 {
 
     static class Node {
         int data;
+        float dataF;
         Node right = null;
         Node down = null;
     }
@@ -203,6 +210,7 @@ public class HW2 {
                 number = line.nextInt();
                 // System.out.printf("%d, ", number);
                 tmpNode.data = number;
+                tmpNode.dataF = number;
 
                 if (rowCount == 0 && colCount == 0) {
                     tmpHead.first = tmpNode;
@@ -381,5 +389,80 @@ public class HW2 {
         }
 
         return result.substring(0, result.length() - 1);
+    }
+
+    private static String detLLMatrix (Head matrixHead) {
+        if (matrixHead.cols != matrixHead.rows) {
+            System.out.println("The given matrix is not square");
+            System.out.println("Program will now exit: FAILED TO GET DETERMINANT");
+            System.exit(0);
+        } 
+
+        matrixHead = fwdElemLLMatrix(matrixHead);
+        Node diagNode = matrixHead.first;
+        float result = diagNode.dataF;
+
+        while (diagNode.down != null) {
+            diagNode = diagNode.down.right;
+            result *= diagNode.dataF;
+        }
+
+        return String.format("%4.1f ", result);
+        
+    }
+
+    private static Head fwdElemLLMatrix (Head matrixHead) {
+        Node rowA = matrixHead.first;
+        Node rowB = rowA.down;
+
+        Node colA = null;
+        Node colB = null;
+
+        float epsilon = 0.00001f;
+        float mul = 0.0f;
+
+
+        // for loop for all the columns
+        while (rowB != null) {
+
+            // we wont leave a column until there are all zeros under it
+            while (Math.abs(recColumn(rowA.down)) > epsilon) {
+
+                // move to the row with a non zero value
+                while (Math.abs(rowB.dataF - 0.0f) <= epsilon) {
+                    rowB = rowB.down;
+                }
+                // rowB now has the the row we need to work on
+                colA = rowA;
+                colB = rowB;
+                
+
+                mul = (float) colB.dataF / colA.dataF;
+
+                while (colB != null) {
+                    colB.data -= colA.data * mul;
+                    colB.dataF -= colA.dataF * mul;
+
+                    colB = colB.right;
+                    colA = colA.right;
+                }
+            }
+
+            rowA = rowA.down.right;
+            rowB = rowA.down;
+        }
+
+        return matrixHead;
+    }
+
+    private static float recColumn (Node column) {
+        // check if all elements below this node are zero;
+        float result = 0.0f;
+        if (column.down == null) {
+            result += column.dataF;
+        } else {
+            result += column.data + recColumn(column.down);
+        }
+        return result;
     }
 }
