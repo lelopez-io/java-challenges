@@ -459,9 +459,9 @@ public class HW2 {
         // check if all elements below this node are zero;
         float result = 0.0f;
         if (column.down == null) {
-            result += column.dataF;
+            result += Math.abs(column.dataF);
         } else {
-            result += column.data + recColumn(column.down);
+            result += Math.abs(column.dataF) + recColumn(column.down);
         }
         return result;
     }
