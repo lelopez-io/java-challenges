@@ -36,10 +36,12 @@ public class HW3 {
         
         int upprLmt = Integer.parseInt(args[2]);
         int currentSize;
+        double result;
 
         for (int i = 1; i <= upprLmt; i++) {
             currentSize = (int) Math.pow(10, i);
-            out.println(timeAlgo(args[0], currentSize));
+            result = timeAlgo(args[0], currentSize);
+            out.println( Double.isInfinite(result) ? "0" : result );
         }
         out.close();
         System.exit(0);
