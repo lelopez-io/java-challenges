@@ -1,0 +1,13 @@
+1 A C
+2 A D
+3 A B
+2 D B
+1 C B
+4 A C
+5 A D
+4 C D
+1 B A
+2 B C
+3 B D
+2 C D
+1 A D
