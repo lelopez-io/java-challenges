@@ -67,9 +67,10 @@ public class HW4 {
     }
 
     public static String moveThree(int disk, char from, char to, char spare) {
+        String moves = "";
+        
         if (disk == 1) return String.format("%d %c %c\n", disk, from, to);
 
-        String moves = "";
         moves += moveThree(disk - 1, from, spare, to);
         moves += String.format("%d %c %c\n", disk, from, to);
         moves += moveThree(disk - 1, spare, to, from);
@@ -78,10 +79,11 @@ public class HW4 {
     }
 
     public static String moveFour(int disk, char from, char to, char s1, char s2){
+        String moves = "";
+        
         if (disk == 0) return "";
         if (disk == 1) return String.format("%d %c %c\n", disk, from, to);
-
-        String moves = "";
+ 
         moves += moveFour(disk - 2, from, s1, s2, to);
         moves += String.format("%d %c %c\n", disk-1, from, s2);
         moves += String.format("%d %c %c\n", disk, from, to);
