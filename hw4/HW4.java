@@ -77,25 +77,32 @@ public class HW4 {
         return moves;
     }
 
-    public static String moveFour(int disk, char from, char to, char spare1, char spare2){
+    public static String moveFour(int disk, char from, char to, char s1, char s2){
         if (disk == 0) return "";
         if (disk == 1) return String.format("%d %c %c\n", disk, from, to);
 
         String moves = "";
-        moves += moveFour(disk - 2, from, spare1, spare2, to);
-        moves += String.format("%d %c %c\n", disk-1, from, spare2);
+        moves += moveFour(disk - 2, from, s1, s2, to);
+        moves += String.format("%d %c %c\n", disk-1, from, s2);
         moves += String.format("%d %c %c\n", disk, from, to);
-        moves += String.format("%d %c %c\n", disk-1, spare2, to);
-        moves += moveFour(disk - 2, spare1, to, from, spare2);
+        moves += String.format("%d %c %c\n", disk-1, s2, to);
+        moves += moveFour(disk - 2, s1, to, from, s2);
 
         return moves;
     }
 
     public static String moveFive(int disk, char from, char to, char s1, char s2, char s3) {
-        if (disk <= 0) return "";
-        if (disk == 1) return String.format("%d %c %c\n", disk, from, to);
-
         String moves = "";
+        
+        if (disk == 0) return "";
+        if (disk == 1) return String.format("%d %c %c\n", disk, from, to);
+        if (disk == 2) {
+            moves += String.format("%d %c %c\n", disk-1, from, s1);
+            moves += String.format("%d %c %c\n", disk, from, to);
+            moves += String.format("%d %c %c\n", disk-1, s1, to);
+            return moves;
+        }
+        
         moves += moveFive(disk -3, from, s1, s2, s3, to);
         moves += String.format("%d %c %c\n", disk-2, from, s3);
         moves += String.format("%d %c %c\n", disk-1, from, s2);
@@ -103,7 +110,6 @@ public class HW4 {
         moves += String.format("%d %c %c\n", disk-1, s2, to);
         moves += String.format("%d %c %c\n", disk-2, s3, to);
         moves += moveFive(disk -3, s1, to, from, s2, s3);
-
 
         return moves;
     }
