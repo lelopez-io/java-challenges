@@ -118,9 +118,13 @@ public class HW5 {
 
             if(temp == ')') {
 
- 
-                result += stack.pop();
+                while(stack.top() != '(') {
+                    result += stack.pop();
+                }
+                stack.pop();
+
                 
+                continue;
                 
                 
 
