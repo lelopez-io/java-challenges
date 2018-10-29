@@ -54,36 +54,36 @@ public class HW5 {
                 System.exit(0);
         }
 
-        out.println(result.trim());
+        System.out.println(result.trim());
         out.close();
         System.exit(0);
 
     }
 
     private static class MyStack {
-        private ArrayList<Character> stack;
+        private ArrayList<String> stack;
 
         private int size;
 
         public MyStack() {
-            stack = new ArrayList<Character>();
+            stack = new ArrayList<String>();
             size = 0;
         }
 
         // Push
-        public void add(char x) {
+        public void add(String x) {
             stack.add(x);
             this.size++;
         }
 
         // Pop
-        public char pop() {
+        public String pop() {
             this.size--;
             return stack.remove(this.size());
         }
 
         // Peek
-        public char top() {
+        public String top() {
             return stack.get(this.size() - 1);
         }
 
@@ -97,17 +97,17 @@ public class HW5 {
             return (this.size() == 0) ? true : false;
         }
 
-        public boolean takesPrecedenceOver(char x) {
+        public boolean takesPrecedenceOver(String x) {
             // false means that the stack doesn't take precedence so the 
             // character will be added to the stack 
             if (this.isEmpty())
                 return false;
             // An opening bracket will always be added.       
-            if (x == '(')
+            if (x.equals("("))
                 return false;
             // We will also add any operations after the opening bracket.
-            char last = this.top();
-            if (last == '(')
+            String last = this.top();
+            if (last.equals("("))
                 return false;
 
             // if none of special cases above are not met then we will compare
@@ -116,18 +116,18 @@ public class HW5 {
             return (this.precedenceLevelOf(x) < this.precedenceLevelOf(last));
         }
 
-        public int precedenceLevelOf(char x) {
+        public int precedenceLevelOf(String x) {
             switch (x) {
-            case '+':
-            case '-':
+            case "+":
+            case "-":
                 return 0;
-            case '*':
-            case '/':
+            case "*":
+            case "/":
                 return 1;
-            case '^':
+            case "^":
                 return 2;
-            case '(':
-            case ')':
+            case "(":
+            case ")":
                 // this value never gets compared it's just so they do not get
                 // swepted up by the default case.
                 return 3;  
@@ -142,7 +142,7 @@ public class HW5 {
         MyStack stack = new MyStack();
 
         for (int i = 0; i < exp.length(); i++) {
-            char temp = exp.charAt(i);
+            String temp = String.valueOf(exp.charAt(i));
 
             // anything that is not our standerd operators will get added
             if (stack.precedenceLevelOf(temp) == -1) {
@@ -151,10 +151,10 @@ public class HW5 {
             }
 
             
-            if (temp == ')') {
+            if (temp.equals(")")) {
                 // if we have a closing bracket we need to pop off the stack
                 // until we get to the opening brackets. Then we pop it off too.
-                while (stack.top() != '(') {
+                while (!stack.top().equals("(")) {
                     result += stack.pop();
                 }
                 stack.pop();
