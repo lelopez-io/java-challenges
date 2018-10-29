@@ -1,4 +1,6 @@
+
 ///////////////////////////////// [Homework 5] /////////////////////////////////
+
 /*  REQUIREMENTS: 
  *      PART1: Create a class stack
  *      - top(): returns the element at the top of the stack without removal.
