@@ -76,17 +76,17 @@ public class HW5 {
             return (this.size() == 0) ? true : false;
         }
 
-        public boolean takesPrec(char x) {
+        public boolean takesPrecedenceOver(char x) {
             if (this.isEmpty())
                 return false;
             if (x == '(')
                 return false;
 
             char last = this.top();
-            return (this.precedenceLevel(x) < this.precedenceLevel(last));
+            return (this.precedenceLevelOf(x) < this.precedenceLevelOf(last));
         }
 
-        public int precedenceLevel(char x) {
+        public int precedenceLevelOf(char x) {
             switch (x) {
             case '+':
             case '-':
@@ -112,7 +112,7 @@ public class HW5 {
         for (int i = 0; i < exp.length(); i++) {
             char temp = exp.charAt(i);
 
-            if (stack.precedenceLevel(temp) == -1) {
+            if (stack.precedenceLevelOf(temp) == -1) {
                 result += temp;
                 continue;
             }
@@ -122,10 +122,10 @@ public class HW5 {
                     result += stack.pop();
                 }
                 stack.pop();
-            } else if (!stack.takesPrec(temp)) {
+            } else if (!stack.takesPrecedenceOver(temp)) {
                 stack.add(temp);
             } else {
-                while (stack.takesPrec(temp)) {
+                while (stack.takesPrecedenceOver(temp)) {
                     result += stack.pop();
                 }
                 stack.add(temp);
