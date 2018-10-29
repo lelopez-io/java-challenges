@@ -40,21 +40,19 @@ public class HW5 {
         String cmd = args[0];
         String result = "";
 
-        
-
         switch (cmd) {
-            case "2":
-                result += infixToPostfix(exp);
-                break;
-            case "3":
-                result += (isPostfix(exp) ? evalPostfix(exp) : "nv");
-                break;
-            default:
-                System.out.println("not a valid first argument. Choose 2 or 3");
-                System.exit(0);
+        case "2":
+            result += infixToPostfix(exp);
+            break;
+        case "3":
+            result += (isPostfix(exp) ? evalPostfix(exp) : "nv");
+            break;
+        default:
+            System.out.println("not a valid first argument. Choose 2 or 3");
+            System.exit(0);
         }
 
-        System.out.println(result.trim());
+        out.println(result.trim());
         out.close();
         System.exit(0);
 
@@ -98,11 +96,11 @@ public class HW5 {
         }
 
         public boolean takesPrecedenceOver(String x) {
-            // false means that the stack doesn't take precedence so the 
-            // character will be added to the stack 
+            // false means that the stack doesn't take precedence so the
+            // character will be added to the stack
             if (this.isEmpty())
                 return false;
-            // An opening bracket will always be added.       
+            // An opening bracket will always be added.
             if (x.equals("("))
                 return false;
             // We will also add any operations after the opening bracket.
@@ -111,8 +109,8 @@ public class HW5 {
                 return false;
 
             // if none of special cases above are not met then we will compare
-            // due to how I set up Infix to Postfis we should neve be comparing 
-            // brackets at this final step.    
+            // due to how I set up Infix to Postfis we should neve be comparing
+            // brackets at this final step.
             return (this.precedenceLevelOf(x) < this.precedenceLevelOf(last));
         }
 
@@ -130,7 +128,7 @@ public class HW5 {
             case ")":
                 // this value never gets compared it's just so they do not get
                 // swepted up by the default case.
-                return 3;  
+                return 3;
             default:
                 return -1;
             }
@@ -150,7 +148,6 @@ public class HW5 {
                 continue;
             }
 
-            
             if (temp.equals(")")) {
                 // if we have a closing bracket we need to pop off the stack
                 // until we get to the opening brackets. Then we pop it off too.
@@ -166,7 +163,7 @@ public class HW5 {
                 while (stack.takesPrecedenceOver(temp)) {
                     result += stack.pop();
                 }
-                if(!stack.isEmpty()) {
+                if (!stack.isEmpty()) {
                     result += stack.pop();
                 }
                 // once the stack doesn't take precedence, add the new operator
@@ -184,14 +181,74 @@ public class HW5 {
     }
 
     private static boolean isPostfix(String exp) {
+        MyStack stack = new MyStack();
 
+        for(int i = 0; i < exp.length(); i++) {
+            String temp = String.valueOf(exp.charAt(i));
 
-        return false;
+            if (stack.precedenceLevelOf(temp) == -1) {
+                stack.add(temp);
+            } else if (stack.size() >= 2) {
+                stack.pop();
+            } else {
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
     public static String evalPostfix(String exp) {
-        float result = 1.0f;
+        MyStack stack = new MyStack();
+        Float tempA;
+        Float tempB;
+        Float tempFloat;
 
-        return String.format("$.1f", result);
+        for (int i = 0; i < exp.length(); i++) {
+            String temp = String.valueOf(exp.charAt(i));
+
+            if (stack.precedenceLevelOf(temp) == -1) {
+                stack.add(temp);
+                continue;
+            } else {
+
+                switch (temp) {
+                    case "+":
+                        tempB = Float.valueOf(stack.pop());
+                        tempA = Float.valueOf(stack.pop());
+                        tempFloat = tempA + tempB;
+                        break;
+                    case "-":
+                        tempB = Float.valueOf(stack.pop());
+                        tempA = Float.valueOf(stack.pop());
+                        tempFloat = tempA - tempB;
+                        break;
+                    case "*":
+                        tempB = Float.valueOf(stack.pop());
+                        tempA = Float.valueOf(stack.pop());
+                        tempFloat = tempA * tempB;
+                        break;
+                    case "/":
+                        tempB = Float.valueOf(stack.pop());
+                        tempA = Float.valueOf(stack.pop());
+                        tempFloat = tempA / tempB;
+                        break;
+                    default :
+                        tempB = Float.valueOf(stack.pop());
+                        tempA = Float.valueOf(stack.pop());
+                        tempFloat = (float) Math.pow(tempA, tempB);
+                        break;
+                }
+
+                stack.add(Float.toString(tempFloat));
+
+            }
+
+        }
+
+        float result = Float.valueOf(stack.pop());
+
+        return String.format("%.1f", result);
     }
 }
