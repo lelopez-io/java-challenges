@@ -52,18 +52,18 @@ public class HW5 {
         // Push
         public void add(char x) {
             stack.add(x);
-            size++;
+            this.size++;
         }
 
         // Pop
         public char pop() {
-            char last = stack.remove(stack.size() - 1);
-            return last;
+            this.size--;
+            return stack.remove(this.size());
         }
 
         // Peek
         public char top() {
-            return stack.get(stack.size() - 1);
+            return stack.get(this.size() - 1);
         }
 
         // Get Size
@@ -73,31 +73,34 @@ public class HW5 {
 
         // Check if Empty
         public boolean isEmpty() {
-            return stack.isEmpty();
+            return (this.size() == 0) ? true : false;
         }
 
         public boolean takesPrec(char x) {
-            if(stack.isEmpty()) return true;
+            if (this.isEmpty())
+                return false;
+            if (x == '(')
+                return false;
 
             char last = this.top();
-            return (this.precedenceLevel(x) > this.precedenceLevel(last));
+            return (this.precedenceLevel(x) < this.precedenceLevel(last));
         }
 
         public int precedenceLevel(char x) {
-            switch(x) {
-                case '+':
-                case '-':
-                    return 0;
-                case '*':
-                case '/':
-                    return 1;
-                case '^':
-                    return 2;
-                case '(':
-                case ')':
-                    return 3;
-                default:
-                    return -1;
+            switch (x) {
+            case '+':
+            case '-':
+                return 0;
+            case '*':
+            case '/':
+                return 1;
+            case '^':
+                return 2;
+            case '(':
+            case ')':
+                return -2;
+            default:
+                return -1;
             }
         }
     }
@@ -106,43 +109,32 @@ public class HW5 {
         String result = "";
         MyStack stack = new MyStack();
 
-        for(int i = 0; i < exp.length(); i++) {
+        for (int i = 0; i < exp.length(); i++) {
             char temp = exp.charAt(i);
 
-            if(stack.precedenceLevel(temp) == -1) {
+            if (stack.precedenceLevel(temp) == -1) {
                 result += temp;
                 continue;
-            } 
+            }
 
-
-
-            if(temp == ')') {
-
-                while(stack.top() != '(') {
+            if (temp == ')') {
+                while (stack.top() != '(') {
                     result += stack.pop();
                 }
                 stack.pop();
-
-                
-                continue;
-                
-                
-
-            } else if(stack.takesPrec(temp)){
+            } else if (!stack.takesPrec(temp)) {
                 stack.add(temp);
             } else {
-                while(!stack.takesPrec(temp)){
+                while (stack.takesPrec(temp)) {
                     result += stack.pop();
                 }
                 stack.add(temp);
-            }  
+            }
         }
 
-        while(!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             result += stack.pop();
         }
-
-
 
         return result;
     }
