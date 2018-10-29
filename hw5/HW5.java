@@ -13,6 +13,10 @@
  *          format. Should support the following operations +,-,*,/, and ^ with
  *          parentheses and follow the ording of BODMAS.
  * 
+ *      PART3: Given an expression in postfix notation, use the stack created to
+ *      - Check whether the input indeed follows a true postfix
+ *      - Evaluate the postfix expression
+ * 
  *  INPUT: 
  *      - Program should take three arguments
  *          1. Part Number
@@ -31,9 +35,21 @@ import java.util.ArrayList;
 
 public class HW5 {
     public static void main(String[] args) throws IOException {
+        String result = "";
+        String exp = args[1];
+        String cmd = args[0];
 
-        String exp = "(2+3)^4*5";
-        String result = infixToPostfix(exp);
+        switch (cmd) {
+            case "2":
+                result += infixToPostfix(exp);
+                break;
+            case "3":
+                result += (isPostfix(exp) ? evalPostfix(exp) : "nv");
+                break;
+            default:
+                System.out.println("not a valid first argument. Choose 2 or 3");
+                System.exit(0);
+        }
 
         System.out.println(result);
 
@@ -137,5 +153,17 @@ public class HW5 {
         }
 
         return result;
+    }
+
+    private static boolean isPostfix(String exp) {
+
+
+        return true;
+    }
+
+    public static String evalPostfix(String exp) {
+        float result = 1.0f;
+
+        return String.format("$.1f", result);
     }
 }

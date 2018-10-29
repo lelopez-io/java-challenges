@@ -3,7 +3,7 @@
 if [ -f HW5 ]; then
     rm HW5
 fi
-javac HW5.java
+javac *.java
 # if the file HW5 does not exit then exit the test
 if [ ! -f HW5.class ]; then
     echo   "\033[1;91mCompile FAILED.\033[0m"
@@ -36,7 +36,7 @@ else
     rm -f itp_2.diff
 fi
 
-java java HW5 3 "23+4^5*" "p_1.output" 1>p_1.stdcout 2>p_1.stderr
+java HW5 3 "23+4^5*" "p_1.output" 1>p_1.stdcout 2>p_1.stderr
 bash -c 'diff -iEBwu p_1.output p_1.txt >p_1.diff'
 if [ $? -ne 0 ]; then
     # display "test case 1 FAILED" to the screen. The word "FAILED" is highlighted in Red color
@@ -48,7 +48,7 @@ else
     rm -f p_1.diff
 fi
 
-java java HW5 3 "23+-" "p_2.output" 1>p_2.stdcout 2>p_2.stderr
+java HW5 3 "23+-" "p_2.output" 1>p_2.stdcout 2>p_2.stderr
 bash -c 'diff -iEBwu p_2.output p_2.txt >p_2.diff'
 if [ $? -ne 0 ]; then
     # display "test case 1 FAILED" to the screen. The word "FAILED" is highlighted in Red color
