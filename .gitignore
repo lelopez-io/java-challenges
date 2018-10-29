@@ -56,3 +56,10 @@ hs_err_pid*
 /hw2/*.stderr
 /hw2/*.diff
 /hw2/*.output
+
+# hw5
+/hw5/*.txt
+/hw5/*.stdcout
+/hw5/*.stderr
+/hw5/*.diff
+/hw5/*.output

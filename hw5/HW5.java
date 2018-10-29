@@ -35,9 +35,12 @@ import java.util.ArrayList;
 
 public class HW5 {
     public static void main(String[] args) throws IOException {
-        String result = "";
+        PrintWriter out = new PrintWriter(args[2]);
         String exp = args[1];
         String cmd = args[0];
+        String result = "";
+
+        
 
         switch (cmd) {
             case "2":
@@ -51,7 +54,9 @@ public class HW5 {
                 System.exit(0);
         }
 
-        System.out.println(result);
+        out.println(result.trim());
+        out.close();
+        System.exit(0);
 
     }
 
@@ -93,12 +98,21 @@ public class HW5 {
         }
 
         public boolean takesPrecedenceOver(char x) {
+            // false means that the stack doesn't take precedence so the 
+            // character will be added to the stack 
             if (this.isEmpty())
                 return false;
+            // An opening bracket will always be added.       
             if (x == '(')
                 return false;
-
+            // We will also add any operations after the opening bracket.
             char last = this.top();
+            if (last == '(')
+                return false;
+
+            // if none of special cases above are not met then we will compare
+            // due to how I set up Infix to Postfis we should neve be comparing 
+            // brackets at this final step.    
             return (this.precedenceLevelOf(x) < this.precedenceLevelOf(last));
         }
 
@@ -114,7 +128,9 @@ public class HW5 {
                 return 2;
             case '(':
             case ')':
-                return -2;
+                // this value never gets compared it's just so they do not get
+                // swepted up by the default case.
+                return 3;  
             default:
                 return -1;
             }
@@ -128,26 +144,38 @@ public class HW5 {
         for (int i = 0; i < exp.length(); i++) {
             char temp = exp.charAt(i);
 
+            // anything that is not our standerd operators will get added
             if (stack.precedenceLevelOf(temp) == -1) {
                 result += temp;
                 continue;
             }
 
+            
             if (temp == ')') {
+                // if we have a closing bracket we need to pop off the stack
+                // until we get to the opening brackets. Then we pop it off too.
                 while (stack.top() != '(') {
                     result += stack.pop();
                 }
                 stack.pop();
             } else if (!stack.takesPrecedenceOver(temp)) {
+                // if what ever is on the stack do not take precedence over temp
                 stack.add(temp);
             } else {
+                // else pop off everything on that stack that takes precedence.
                 while (stack.takesPrecedenceOver(temp)) {
                     result += stack.pop();
                 }
+                if(!stack.isEmpty()) {
+                    result += stack.pop();
+                }
+                // once the stack doesn't take precedence, add the new operator
                 stack.add(temp);
             }
         }
 
+        // once we get to the end of our expression we make sure nothing is on
+        // the stack by adding any remaining operators to our postfix expression
         while (!stack.isEmpty()) {
             result += stack.pop();
         }
@@ -158,7 +186,7 @@ public class HW5 {
     private static boolean isPostfix(String exp) {
 
 
-        return true;
+        return false;
     }
 
     public static String evalPostfix(String exp) {
