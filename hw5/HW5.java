@@ -1,4 +1,3 @@
-
 ///////////////////////////////// [Homework 5] /////////////////////////////////
 /*  REQUIREMENTS: 
  *      PART1: Create a class stack
@@ -60,7 +59,6 @@ public class HW5 {
 
     private static class MyStack {
         private ArrayList<String> stack;
-
         private int size;
 
         public MyStack() {
@@ -70,8 +68,8 @@ public class HW5 {
 
         // Push
         public void add(String x) {
-            stack.add(x);
             this.size++;
+            stack.add(x);
         }
 
         // Pop
@@ -98,20 +96,17 @@ public class HW5 {
         public boolean takesPrecedenceOver(String x) {
             // false means that the stack doesn't take precedence so the
             // character will be added to the stack
-            if (this.isEmpty())
+
+            // An opening bracket and anything after it will always be added.
+            if (this.isEmpty() || x.equals("(") || this.top().equals("("))
                 return false;
-            // An opening bracket will always be added.
-            if (x.equals("("))
-                return false;
-            // We will also add any operations after the opening bracket.
-            String last = this.top();
-            if (last.equals("("))
-                return false;
+            
 
             // if none of special cases above are not met then we will compare
             // due to how I set up Infix to Postfis we should neve be comparing
             // brackets at this final step.
-            return (this.precedenceLevelOf(x) < this.precedenceLevelOf(last));
+            return (this.precedenceLevelOf(x) < this.precedenceLevelOf(this.top()));
+
         }
 
         public int precedenceLevelOf(String x) {
@@ -136,8 +131,8 @@ public class HW5 {
     }
 
     private static String infixToPostfix(String exp) {
-        String result = "";
         MyStack stack = new MyStack();
+        String result = "";
 
         for (int i = 0; i < exp.length(); i++) {
             String temp = String.valueOf(exp.charAt(i));
